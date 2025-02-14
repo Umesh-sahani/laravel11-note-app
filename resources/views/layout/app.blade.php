@@ -14,11 +14,11 @@
     @yield('content')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
+
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
     <script>
         tinymce.init({
-            selector: '#blog_content',
+            selector: '.tinymce6',
             height: 500,
             plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount imagetools media code',
             toolbar: 'undo redo | styles | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image table media code | removeformat | help',
@@ -110,6 +110,48 @@
                             .catch(error => console.error('Error:', error));
                     };
                     input.click();
+                }
+            },
+            setup: function(editor) {
+                let previousImages = [];
+
+                editor.on('init', function() {
+                    updateImageList();
+                });
+
+                editor.on('NodeChange', function() {
+                    updateImageList();
+                });
+
+                function updateImageList() {
+                    let content = editor.getContent();
+                    let usedImages = [];
+
+                    // Extract image sources from the content
+                    content.replace(/<img[^>]+src="([^">]+)"/g, function(match, src) {
+                        usedImages.push(src);
+                    });
+
+                    // Find images that were removed
+                    let removedImages = previousImages.filter(img => !usedImages.includes(img));
+
+                    if (removedImages.length > 0) {
+                        // Send a request to clean up only the removed images
+                        fetch('{{ route('cleanup.images') }}', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                removed_images: removedImages
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            }
+                        });
+                    }
+
+                    // Update previousImages list
+                    previousImages = usedImages;
                 }
             }
         });

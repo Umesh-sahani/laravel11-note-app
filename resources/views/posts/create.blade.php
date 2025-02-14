@@ -14,7 +14,7 @@
                     <input type="text" name="title" class="form-control">
 
                     <label>Blog Content:</label>
-                    <textarea id="blog_content" name="content"></textarea> <!-- TinyMCE applies here -->
+                    <textarea id="blog_content" class="tinymce6" name="content"></textarea> <!-- TinyMCE applies here -->
 
                     <button type="submit" class="btn btn-primary mt-3">Publish</button>
                 </form>
