@@ -15,7 +15,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+    <script src="{{ asset("plugins/tinymce/tinymce.min.js") }}"></script>
     <script>
         tinymce.init({
             selector: '.tinymce6',
