@@ -14,20 +14,7 @@
 
     @yield('content')
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
-
-    {{-- <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
-    <script>
-        tinymce.init({
-            selector: '#blog_content',
-            height: 400,
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-            branding: false
-        });
-    </script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
     <script>
@@ -39,7 +26,7 @@
             branding: false,
 
             // Enable automatic image upload
-            images_upload_url: '/upload-image',
+            images_upload_url: '{{ route('upload.image') }}',
             automatic_uploads: true,
 
             // Handle image selection from local files
@@ -53,7 +40,7 @@
                         let formData = new FormData();
                         formData.append('file', file);
 
-                        fetch('/upload-image', {
+                        fetch('{{ route('upload.image') }}', {
                                 method: 'POST',
                                 body: formData,
                                 headers: {
@@ -63,7 +50,7 @@
                             })
                             .then(response => response.json())
                             .then(data => {
-                                callback(data.location); // Insert uploaded image URL
+                                callback(data.location);
                             })
                             .catch(error => console.error('Error:', error));
                     };
@@ -72,6 +59,8 @@
             }
         });
     </script>
+
+
 
 
 
