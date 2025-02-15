@@ -26,7 +26,8 @@ class ImageUploadController extends Controller
             $image = UploadImg::create(['image' => $path]);
 
             return response()->json([
-                'location' => asset('storage/' . $path)
+                'location' => asset('storage/' . $path),
+                'id' => $image->id
             ]);
         }
 
