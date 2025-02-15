@@ -15,7 +15,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="{{ asset("plugins/tinymce/tinymce.min.js") }}"></script>
+    <script src="{{ asset('plugins/tinymce/tinymce.min.js') }}"></script>
     <script>
         tinymce.init({
             selector: '.tinymce6',
@@ -112,6 +112,7 @@
                     input.click();
                 }
             },
+
             setup: function(editor) {
                 let previousImages = [];
 
@@ -127,26 +128,28 @@
                     let content = editor.getContent();
                     let usedImages = [];
 
-                    // Extract image sources from the content
+                    // Extract full image source URLs from the content
                     content.replace(/<img[^>]+src="([^">]+)"/g, function(match, src) {
                         usedImages.push(src);
                     });
 
-                    // Find images that were removed
+                    // Find removed images
                     let removedImages = previousImages.filter(img => !usedImages.includes(img));
 
                     if (removedImages.length > 0) {
-                        // Send a request to clean up only the removed images
-                        fetch('{{ route('cleanup.images') }}', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                removed_images: removedImages
-                            }),
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
-                            }
+                        removedImages.forEach(imageSrc => {
+                            // Send the full image path
+                            fetch('{{ route('cleanup.image') }}', {
+                                method: 'POST',
+                                body: JSON.stringify({
+                                    image_src: imageSrc
+                                }),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').getAttribute('content')
+                                }
+                            });
                         });
                     }
 
@@ -154,6 +157,7 @@
                     previousImages = usedImages;
                 }
             }
+
         });
     </script>
 

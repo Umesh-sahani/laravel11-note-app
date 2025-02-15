@@ -51,5 +51,32 @@ class ImageUploadController extends Controller
         return response()->json(['message' => 'Old images deleted successfully']);
     }
 
+    public function cleanupImage(Request $request)
+    {
+        $request->validate([
+            'image_src' => 'required|string'
+        ]);
+
+        $imageSrc = str_replace('../storage/', '', $request->image_src);
+        // Find image in the database
+        $image = UploadImg::where('image', $imageSrc)->first();
+
+        if ($image) {
+            $filePath = 'storage/' . $image->image;
+
+            // Check if the file exists and delete it
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            // Delete the database record
+            $image->delete();
+
+            return response()->json(['message' => 'Image deleted successfully']);
+        }
+        return response()->json(['error' => 'Image not found'], 404);
+    }
+
+
 
 }
