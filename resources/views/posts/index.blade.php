@@ -11,11 +11,11 @@
                 <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col">Action</th>
+                            <th style="width: 100px">#</th>
+                            <th>Title</th>
+                            <th>Slug</th>
+                            <th style="width: 180px">Created At</th>
+                            <th style="width: 120px">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,9 +26,14 @@
                                     <td>{{ $post->title }}</td>
                                     <td>{{ $post->slug }}</td>
                                     <td>{{ $post->created_at }}</td>
-                                    <td>
-                                        <a href="{{ route('posts.show', $post->id) }}"
-                                            class="btn btn-sm btn-primary">view</a>
+                                    <td class="text-center">
+                                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-sm btn-primary">
+                                            view
+                                        </a>
+                                        <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-warning">
+                                            edit
+                                        </a>
+
                                     </td>
                                 </tr>
                             @endforeach

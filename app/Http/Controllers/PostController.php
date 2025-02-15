@@ -60,7 +60,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit', ['post' => $post]);
     }
 
     /**
@@ -68,7 +68,18 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required'
+        ]);
+
+        $post->update([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'content' => $request->content
+        ]);
+
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
     }
 
     /**
